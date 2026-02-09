@@ -1,6 +1,7 @@
 package com.musicstreaming.app.controller;
 
-import com.musicstreaming.app.model.Song;
+import com.musicstreaming.app.dto.SongResponse;
+import com.musicstreaming.app.mapper.SongMapper;
 import com.musicstreaming.app.service.AdminSongService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,6 @@ import java.util.UUID;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminSongController {
 
-    // Checking
     private final AdminSongService adminSongService;
 
     public AdminSongController(AdminSongService adminSongService) {
@@ -23,7 +23,7 @@ public class AdminSongController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Song uploadSong(
+    public SongResponse uploadSong(
             @RequestParam String title,
             @RequestParam String artist,
             @RequestParam(required = false) String album,
@@ -33,7 +33,7 @@ public class AdminSongController {
             @RequestParam(required = false) MultipartFile coverImage
     ) throws IOException {
 
-        return adminSongService.uploadSong(
+        return SongMapper.toResponse(adminSongService.uploadSong(
                 title,
                 artist,
                 album,
@@ -41,7 +41,7 @@ public class AdminSongController {
                 durationSec,
                 audioFile,
                 coverImage
-        );
+        ));
     }
 
     @DeleteMapping("/{id}")

@@ -16,7 +16,7 @@ public class PlaylistMapper {
                 .toList();
 
         return new PlaylistResponse(
-                playlist.getOwnerId(),
+                playlist.getId(),
                 playlist.getName(),
                 playlist.getCreatedAt(),
                 songs

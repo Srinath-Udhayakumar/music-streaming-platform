@@ -1,6 +1,7 @@
 package com.musicstreaming.app.controller;
 
-import com.musicstreaming.app.model.Playlist;
+import com.musicstreaming.app.dto.PlaylistResponse;
+import com.musicstreaming.app.mapper.PlaylistMapper;
 import com.musicstreaming.app.model.User;
 import com.musicstreaming.app.service.PlaylistService;
 import com.musicstreaming.app.service.UserService;
@@ -32,13 +33,18 @@ public class PlaylistController {
     }
 
     @PostMapping
-    public Playlist createPlaylist(@RequestParam String name) {
-        return playlistService.createPlaylist(name, currentUser());
+    public PlaylistResponse createPlaylist(@RequestParam String name) {
+        return PlaylistMapper.toResponse(
+                playlistService.createPlaylist(name, currentUser())
+        );
     }
 
     @GetMapping
-    public List<Playlist> myPlaylists() {
-        return playlistService.getUserPlaylists(currentUser());
+    public List<PlaylistResponse> myPlaylists() {
+        return playlistService.getUserPlaylists(currentUser())
+                .stream()
+                .map(PlaylistMapper::toResponse)
+                .toList();
     }
 
     @PostMapping("/{playlistId}/songs/{songId}")

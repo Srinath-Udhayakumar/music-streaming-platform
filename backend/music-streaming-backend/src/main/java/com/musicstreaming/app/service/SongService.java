@@ -21,10 +21,7 @@ public class SongService {
     }
 
     public List<Song> getAllActiveSongs() {
-        return songRepository.findAll()
-                .stream()
-                .filter(Song::isActive)
-                .toList();
+        return songRepository.findAllActive();
     }
 
     public Song getSongById(UUID songId) {
@@ -33,14 +30,14 @@ public class SongService {
     }
 
     public List<Song> searchByArtist(String artist) {
-        return songRepository.findByArtistIgnoreCase(artist);
+        return songRepository.findByArtistIgnoreCaseAndActiveTrue(artist);
     }
 
     public List<Song> searchByTitle(String title) {
-        return songRepository.findByTitleContainingIgnoreCase(title);
+        return songRepository.findByTitleContainingIgnoreCaseAndActiveTrue(title);
     }
 
     public List<Song> searchByGenre(String genre) {
-        return songRepository.findByGenreIgnoreCase(genre);
+        return songRepository.findByGenreIgnoreCaseAndActiveTrue(genre);
     }
 }

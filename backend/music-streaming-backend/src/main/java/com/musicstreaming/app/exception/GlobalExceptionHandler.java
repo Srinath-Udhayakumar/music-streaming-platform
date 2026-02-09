@@ -3,6 +3,7 @@ package com.musicstreaming.app.exception;
 import com.musicstreaming.app.dto.ApiError;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -97,8 +98,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(
             Exception ex,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
+        // Skip error response for audio/mpeg streaming endpoints
+        String contentType = response.getContentType();
+        if (contentType != null && contentType.contains("audio/mpeg")) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+
         return buildError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "INTERNAL_ERROR",

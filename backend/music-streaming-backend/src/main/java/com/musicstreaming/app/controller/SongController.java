@@ -27,15 +27,12 @@ public class SongController {
                 .toList();
     }
 
-
-    // USER + ADMIN
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/{id}")
     public SongResponse getSong(@PathVariable UUID id) {
         return SongMapper.toResponse(songService.getSongById(id));
     }
 
-    // USER + ADMIN
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/search/artist")
     public List<SongResponse> searchByArtist(@RequestParam String artist) {

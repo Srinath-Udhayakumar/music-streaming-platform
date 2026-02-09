@@ -8,4 +8,4 @@ export interface Song {
   durationSec: number;
   audioPath: string;
   coverPath?: string;
-}
+} 

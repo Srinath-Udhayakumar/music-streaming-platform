@@ -14,13 +14,13 @@ public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
-    private UUID ownerId;
+    private UUID id;
 
     @Column(nullable = false, length = 255)
     private String name;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)  // Owner of the playlist
-    @JoinColumn(name = "user_id", nullable = false)  // Foreign key to User
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
     @OneToMany(
@@ -34,7 +34,6 @@ public class Playlist {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-
     protected Playlist() {}
 
     public Playlist(String name, User owner) {
@@ -47,8 +46,6 @@ public class Playlist {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ===== Domain behavior =====
-
     public void addSong(Song song, int position) {
         PlaylistSong playlistSong = new PlaylistSong(this, song, position);
         songs.add(playlistSong);
@@ -57,7 +54,5 @@ public class Playlist {
     public void removeSong(Song song) {
         songs.removeIf(ps -> ps.getSong().equals(song));
     }
-
-    // ===== Getters =====
 
 }

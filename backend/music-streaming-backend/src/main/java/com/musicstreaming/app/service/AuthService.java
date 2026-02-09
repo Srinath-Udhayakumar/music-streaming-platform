@@ -5,8 +5,6 @@ import com.musicstreaming.app.dto.LoginRequest;
 import com.musicstreaming.app.model.User;
 import com.musicstreaming.app.repository.UserRepository;
 import com.musicstreaming.app.security.jwt.JwtService;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +23,6 @@ public class AuthService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-    }
-
-    public void printEncodedPassword() {
-        System.out.println("ENCODED = " + passwordEncoder.encode("Admin@12345"));
-    }
-
-    @PostConstruct
-    public void init() {
-        printEncodedPassword();
     }
 
 

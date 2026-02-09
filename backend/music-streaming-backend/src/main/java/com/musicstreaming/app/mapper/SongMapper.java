@@ -10,8 +10,11 @@ public class SongMapper {
                 song.getId(),
                 song.getTitle(),
                 song.getArtist(),
+                song.getAlbum(),
                 song.getGenre(),
-                song.getDurationSec()
+                song.getDurationSec(),
+                song.getAudioPath(),
+                song.getCoverPath()
         );
     }
 }

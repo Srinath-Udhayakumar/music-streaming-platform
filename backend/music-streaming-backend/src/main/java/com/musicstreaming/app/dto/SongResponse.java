@@ -6,6 +6,9 @@ public record SongResponse(
         UUID id,
         String title,
         String artist,
+        String album,
         String genre,
-        int durationSeconds
+        int durationSeconds,
+        String audioPath,
+        String coverPath
 ) {}

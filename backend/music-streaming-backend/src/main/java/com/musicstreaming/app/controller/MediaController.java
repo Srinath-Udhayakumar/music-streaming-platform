@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 @RequestMapping("/media")
 public class MediaController {
 
-    @GetMapping(value = "/audio/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/audio/{filename}", produces = "audio/mpeg")
     public ResponseEntity<Resource> streamAudio(@PathVariable String filename) {
 
         Path filePath = Paths.get("storage", "audio").resolve(filename).normalize();
@@ -25,8 +25,9 @@ public class MediaController {
         }
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
+                .contentType(MediaType.parseMediaType("audio/mpeg"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                 .body(resource);
     }
 }

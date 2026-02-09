@@ -29,7 +29,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {}) // 👈 IMPORTANT
+                .cors(cors -> {})
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/actuator/health",
                                 "/storage/**",
-                                "/api/songs/**"
+                                "/media/audio/**",
+                                "/api/songs"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -50,7 +51,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 👇 THIS IS THE KEY PART
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

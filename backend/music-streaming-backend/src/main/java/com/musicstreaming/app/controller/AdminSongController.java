@@ -15,7 +15,7 @@ import java.util.UUID;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminSongController {
 
-    // Check
+    // Checking
     private final AdminSongService adminSongService;
 
     public AdminSongController(AdminSongService adminSongService) {

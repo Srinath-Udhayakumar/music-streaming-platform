@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: music-streaming-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/music_streaming_db
+    username: postgres
+    password: 231429
+    driver-class-name: org.postgresql.Driver
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8081
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+jwt:
+  secret: THIS_IS_A_32_CHAR_SECRET_KEY_FOR_JWT!!
+  expiration-millis: 1800000

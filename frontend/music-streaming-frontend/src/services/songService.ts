@@ -1,9 +1,13 @@
-import axios from "axios";
-import type { Song } from "../types/Song";
+/**
+ * Legacy Song Service (DEPRECATED)
+ * Use songsAPI from @/api/songsAPI instead
+ * 
+ * Kept for backward compatibility only
+ */
 
-const API_URL = "http://localhost:8081/api/songs";
+import { songsAPI } from '@/api/songsAPI';
+import type { Song } from '@/types/api';
 
 export const getSongs = async (): Promise<Song[]> => {
-  const response = await axios.get(API_URL);
-  return response.data;
+  return songsAPI.getAllSongs();
 };

@@ -3,10 +3,10 @@
  * Manages global auth state, token persistence, and user information
  */
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { authAPI } from '@/api/authAPI';
-import type { User, LoginRequest } from '@/types/api';
+import type { LoginRequest, User } from '@/types/api';
 import { getErrorMessage } from '@/utils/helpers';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   user: User | null;

@@ -3,10 +3,10 @@
  * Handles user authentication with email and password
  */
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthContext';
 import { isValidEmail } from '@/utils/helpers';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/auth.css';
 
 const Login = () => {

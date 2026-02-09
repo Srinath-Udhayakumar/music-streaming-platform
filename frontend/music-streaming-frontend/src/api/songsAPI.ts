@@ -3,9 +3,9 @@
  * Handles song retrieval, searching, and audio streaming
  */
 
-import { apiClient } from './client';
 import { API_CONFIG } from '@/config';
 import type { Song } from '@/types/api';
+import { apiClient } from './client';
 
 const endpoint = API_CONFIG.ENDPOINTS.SONGS;
 const streamEndpoint = API_CONFIG.ENDPOINTS.STREAM;

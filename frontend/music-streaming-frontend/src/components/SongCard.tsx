@@ -3,10 +3,10 @@
  * Displays song information in grid format (Apple Music style)
  */
 
-import { useState } from 'react';
+import { songsAPI } from '@/api/songsAPI';
 import type { Song } from '@/types/api';
 import { formatDuration } from '@/utils/helpers';
-import { songsAPI } from '@/api/songsAPI';
+import { useState } from 'react';
 import '../styles/components.css';
 
 interface SongCardProps {

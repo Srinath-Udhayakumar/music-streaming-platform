@@ -2,8 +2,8 @@
  * HTTP Client with automatic JWT handling
  */
 
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'axios';
 import { API_CONFIG, AUTH_CONFIG } from '@/config';
+import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({

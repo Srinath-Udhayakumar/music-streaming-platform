@@ -3,10 +3,10 @@
  * Handles login, token management, and JWT lifecycle
  */
 
-import { apiClient, setAuthToken, clearAuthToken } from './client';
 import { API_CONFIG } from '@/config';
 import type { AuthResponse, LoginRequest, User } from '@/types/api';
 import { parseJwt } from '@/utils/jwt';
+import { apiClient, clearAuthToken, setAuthToken } from './client';
 
 const endpoint = API_CONFIG.ENDPOINTS.AUTH;
 

@@ -1,0 +1,380 @@
+/**
+ * Player Bar Styles
+ * Persistent music player with Apple Music-inspired design
+ */
+
+.player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 260px;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(180deg, #1c1c1e 0%, #0a0a0a 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  z-index: 50;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.3);
+}
+
+.player-bar.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.player-placeholder {
+  text-align: center;
+}
+
+.player-placeholder p {
+  font-size: 15px;
+  margin: 0 0 4px 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.player-placeholder span {
+  font-size: 13px;
+}
+
+/* Left: Song Info */
+.player-song-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.player-cover {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.player-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  font-size: 28px;
+  color: #fff;
+  opacity: 0.8;
+}
+
+.player-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-artist {
+  font-size: 12px;
+  margin: 4px 0 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-album {
+  font-size: 11px;
+  margin: 2px 0 0 0;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Center: Controls */
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 32px;
+  text-align: center;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.progress-slider {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  transform: translateY(-50%);
+  opacity: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+}
+
+.progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.progress-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Playback Buttons */
+.playback-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.player-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.player-button:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  transform: scale(1.1);
+}
+
+.player-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.player-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.play-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button.playing {
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(102, 126, 234, 0); }
+}
+
+/* Right: Volume & Settings */
+.player-volume-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.volume-button {
+  font-size: 18px;
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .player-bar {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 12px;
+    padding: 12px 20px;
+  }
+
+  .player-song-info {
+    order: 1;
+  }
+
+  .player-controls {
+    order: 2;
+    gap: 8px;
+  }
+
+  .player-volume-control {
+    order: 3;
+  }
+
+  .player-controls {
+    gap: 8px;
+  }
+
+  .playback-buttons {
+    gap: 12px;
+  }
+
+  .volume-slider {
+    width: 60px;
+  }
+}
+
+@media (max-width: 640px) {
+  .player-bar {
+    left: 0;
+    height: 80px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .player-song-info {
+    grid-column: 1 / -1;
+  }
+
+  .player-controls {
+    order: 2;
+    gap: 8px;
+  }
+
+  .player-progress-container {
+    display: none;
+  }
+
+  .playback-buttons {
+    gap: 16px;
+  }
+
+  .player-button {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .play-button {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .player-volume-control {
+    order: 3;
+  }
+
+  .volume-slider {
+    display: none;
+  }
+
+  .time-label {
+    display: none;
+  }
+
+  .player-cover {
+    width: 48px;
+    height: 48px;
+  }
+
+  .cover-placeholder {
+    font-size: 20px;
+  }
+
+  .player-title {
+    font-size: 13px;
+  }
+
+  .player-artist {
+    font-size: 11px;
+  }
+}

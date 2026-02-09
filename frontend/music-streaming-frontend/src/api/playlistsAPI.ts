@@ -3,9 +3,9 @@
  * Handles playlist CRUD operations and song management
  */
 
-import { apiClient } from './client';
 import { API_CONFIG } from '@/config';
 import type { Playlist } from '@/types/api';
+import { apiClient } from './client';
 
 const endpoint = API_CONFIG.ENDPOINTS.PLAYLISTS;
 

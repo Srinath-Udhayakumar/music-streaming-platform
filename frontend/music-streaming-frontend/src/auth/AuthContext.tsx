@@ -4,7 +4,7 @@
  */
 
 import { authAPI } from '@/api/authAPI';
-import type { LoginRequest, User } from '@/types/api';
+import type { LoginRequest, SignupRequest, User } from '@/types/api';
 import { getErrorMessage } from '@/utils/helpers';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
@@ -14,6 +14,7 @@ interface AuthContextType {
   isLoading: boolean;
   error: string | null;
   login: (request: LoginRequest) => Promise<void>;
+  register: (request: SignupRequest) => Promise<void>;
   logout: () => void;
   clearError: () => void;
 }
@@ -76,6 +77,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
+  const register = useCallback(async (request: SignupRequest) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { user: newUser } = await authAPI.register(request);
+      setUser(newUser);
+    } catch (err) {
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   const logout = useCallback(() => {
     authAPI.logout();
     setUser(null);
@@ -92,6 +109,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isLoading,
     error,
     login,
+    register,
     logout,
     clearError,
   };

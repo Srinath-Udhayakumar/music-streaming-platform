@@ -112,6 +112,17 @@ export const truncateText = (text: string, maxLength: number): string => {
  */
 export const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
+    // Axios error
+    const axiosError = error as any;
+    if (axiosError.response?.data?.message) {
+      return String(axiosError.response.data.message);
+    }
+    if (axiosError.response?.data?.details) {
+      return String(axiosError.response.data.details);
+    }
+    if (axiosError.response?.statusText) {
+      return String(axiosError.response.statusText);
+    }
     return error.message;
   }
   
@@ -121,6 +132,11 @@ export const getErrorMessage = (error: unknown): string => {
   
   if (typeof error === 'object' && error !== null) {
     const err = error as Record<string, unknown>;
+    if (err.response) {
+      const response = err.response as any;
+      if (response?.data?.message) return String(response.data.message);
+      if (response?.data?.details) return String(response.data.details);
+    }
     if (err.message) return String(err.message);
     if (err.data) return String(err.data);
   }

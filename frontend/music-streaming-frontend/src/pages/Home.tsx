@@ -3,11 +3,12 @@
  * Main library view with song grid and search
  */
 
-import { useState, useEffect } from 'react';
-import SongCard from '@/components/SongCard';
-import type { Song, Playlist } from '@/types/api';
-import { songsAPI } from '@/api/songsAPI';
 import { playlistsAPI } from '@/api/playlistsAPI';
+import SongCard from '@/components/SongCard';
+import type { Playlist, Song } from '@/types/api';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/auth/AuthContext';
+import { songsAPI } from '@/api';
 
 interface HomeProps {
   songs: Song[];
@@ -22,6 +23,7 @@ const Home = ({
   isLoading = false,
   onPlayerChange
 }: HomeProps) => {
+  const { user } = useAuth();
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [userPlaylists, setUserPlaylists] = useState<Playlist[]>([]);
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
@@ -69,6 +71,21 @@ const Home = ({
   const handleAddToPlaylist = (song: Song) => {
     setSelectedSongForPlaylist(song);
     setShowPlaylistModal(true);
+  };
+
+  const handleDeleteSong = async (song: Song) => {
+    if (!window.confirm(`Delete "${song.title}" by ${song.artist}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await songsAPI.deleteSong(song.id);
+      // Refresh songs list after deletion
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to delete song:', error);
+      alert('Failed to delete song. Please try again.');
+    }
   };
 
   const handleAddSongToPlaylist = async (playlistId: string) => {
@@ -147,7 +164,9 @@ const Home = ({
               song={song}
               onPlay={handlePlaySong}
               onAddToPlaylist={handleAddToPlaylist}
+              onDelete={user?.role === 'ADMIN' ? handleDeleteSong : undefined}
               isPlaying={currentSong?.id === song.id}
+              isAdmin={user?.role === 'ADMIN'}
             />
           ))}
         </div>
@@ -166,7 +185,7 @@ const Home = ({
         }}>
           <div style={{
             background: 'rgba(28, 28, 30, 0.95)',
-            backdrop filter: 'blur(10px)',
+            backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: '16px',
             padding: '24px',

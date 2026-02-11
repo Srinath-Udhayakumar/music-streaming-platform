@@ -1,6 +1,7 @@
 /**
  * Login Page Component
  * Handles user authentication with email and password
+ * Apple Music-inspired design
  */
 
 import { useAuth } from '@/auth/AuthContext';
@@ -63,14 +64,14 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>Music Player</h1>
+          <h1>♪ Music Streaming</h1>
           <p>Sign in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {/* Error Messages */}
           {(error || validationError) && (
-            <div className="error-message">
+            <div className="error-message auth-error">
               <span>⚠️</span>
               <p>{error || validationError}</p>
             </div>
@@ -123,10 +124,18 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Demo Credentials */}
-        <div className="demo-info">
-          <p className="text-center text-sm">
-            This is a demo. Use any valid password to continue.
+        {/* Sign Up Link */}
+        <div className="auth-footer">
+          <p>
+            Don't have an account?{' '}
+            <button
+              type="button"
+              className="auth-link"
+              onClick={() => navigate('/register')}
+              disabled={isLoading}
+            >
+              Sign Up
+            </button>
           </p>
         </div>
       </div>

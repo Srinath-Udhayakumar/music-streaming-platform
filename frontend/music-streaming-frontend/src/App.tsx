@@ -8,11 +8,15 @@ import { AuthProvider, useAuth } from '@/auth/AuthContext';
 import { ProtectedRoute } from '@/auth/ProtectedRoute';
 import PlayerBar from '@/components/PlayerBar';
 import Sidebar from '@/components/Sidebar';
+import Browse from '@/pages/Browse';
 import Home from '@/pages/Home';
+import Library from '@/pages/Library';
 import Login from '@/pages/Login';
+import Playlists from '@/pages/Playlists';
+import Register from '@/pages/Register';
 import type { Song } from '@/types/api';
 import { useEffect, useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './index.css';
 
 /**
@@ -49,6 +53,7 @@ const AppContent = () => {
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="*" element={<Login />} />
       </Routes>
     );
@@ -79,12 +84,7 @@ const AppContent = () => {
             path="/browse"
             element={
               <ProtectedRoute>
-                <Home
-                  songs={songs}
-                  onSelect={setCurrentSong}
-                  isLoading={isLoadingSongs}
-                  onPlayerChange={setCurrentSong}
-                />
+                <Browse onPlayerChange={setCurrentSong} />
               </ProtectedRoute>
             }
           />
@@ -92,12 +92,15 @@ const AppContent = () => {
             path="/library"
             element={
               <ProtectedRoute>
-                <Home
-                  songs={songs}
-                  onSelect={setCurrentSong}
-                  isLoading={isLoadingSongs}
-                  onPlayerChange={setCurrentSong}
-                />
+                <Library onPlayerChange={setCurrentSong} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/playlists"
+            element={
+              <ProtectedRoute>
+                <Playlists />
               </ProtectedRoute>
             }
           />
@@ -141,13 +144,5 @@ function App() {
     </Router>
   );
 }
-
-// Simple Navigate component for redirects
-const Navigate = ({ to }: { to: string }) => {
-  useEffect(() => {
-    window.location.href = to;
-  }, [to]);
-  return null;
-};
 
 export default App;

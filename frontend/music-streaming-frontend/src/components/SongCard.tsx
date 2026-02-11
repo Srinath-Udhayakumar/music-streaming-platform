@@ -1,35 +1,48 @@
 /**
  * Song Card Component
  * Displays song information in grid format (Apple Music style)
+ * Includes play, playlist, and admin delete actions
  */
 
 import { songsAPI } from '@/api/songsAPI';
 import type { Song } from '@/types/api';
 import { formatDuration } from '@/utils/helpers';
 import { useState } from 'react';
-import '../styles/components.css';
+import '../styles/song-card.css';
 
 interface SongCardProps {
   song: Song;
   onPlay: (song: Song) => void;
   onAddToPlaylist?: (song: Song) => void;
+  onDelete?: (song: Song) => void;
   isPlaying?: boolean;
+  isAdmin?: boolean;
 }
 
 const SongCard = ({ 
   song, 
   onPlay, 
   onAddToPlaylist,
-  isPlaying = false
+  onDelete,
+  isPlaying = false,
+  isAdmin = false
 }: SongCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const coverUrl = songsAPI.getCoverUrl(song.coverPath);
-  const placeholderBg = `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`;
+  const placeholderBg = `linear-gradient(135deg, #1a1a1a 0%, #242424 100%)`;
 
   return (
-    <div className={`song-card ${isPlaying ? 'playing' : ''}`}>
+    <div 
+      className={`song-card ${isPlaying ? 'playing' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setShowMenu(false);
+      }}
+    >
       {/* Cover Image */}
       <div 
         className="song-card-image"
@@ -45,16 +58,18 @@ const SongCard = ({
         )}
 
         {/* Overlay with Play Button */}
-        <div className="song-card-overlay">
-          <button 
-            className="play-button"
-            onClick={() => onPlay(song)}
-            title="Play song"
-            aria-label={`Play ${song.title}`}
-          >
-            {isPlaying ? '⏸' : '▶'}
-          </button>
-        </div>
+        {isHovered && (
+          <div className="song-card-overlay">
+            <button 
+              className="play-button"
+              onClick={() => onPlay(song)}
+              title="Play song"
+              aria-label={`Play ${song.title}`}
+            >
+              ▶
+            </button>
+          </div>
+        )}
 
         {/* Now Playing Indicator */}
         {isPlaying && (
@@ -87,7 +102,7 @@ const SongCard = ({
       </div>
 
       {/* Menu Button */}
-      {onAddToPlaylist && (
+      {(onAddToPlaylist || (isAdmin && onDelete)) && (
         <div className="song-card-menu">
           <button
             className="menu-button"
@@ -99,16 +114,29 @@ const SongCard = ({
           </button>
 
           {showMenu && (
-            <div className="menu-dropdown">
-              <button 
-                onClick={() => {
-                  onAddToPlaylist(song);
-                  setShowMenu(false);
-                }}
-                className="menu-item"
-              >
-                Add to Playlist
-              </button>
+            <div className="menu-dropdown" onClick={(e) => e.stopPropagation()}>
+              {onAddToPlaylist && (
+                <button 
+                  onClick={() => {
+                    onAddToPlaylist(song);
+                    setShowMenu(false);
+                  }}
+                  className="menu-item"
+                >
+                  Add to Playlist
+                </button>
+              )}
+              {isAdmin && onDelete && (
+                <button 
+                  onClick={() => {
+                    onDelete(song);
+                    setShowMenu(false);
+                  }}
+                  className="menu-item danger"
+                >
+                  Delete Song
+                </button>
+              )}
             </div>
           )}
         </div>

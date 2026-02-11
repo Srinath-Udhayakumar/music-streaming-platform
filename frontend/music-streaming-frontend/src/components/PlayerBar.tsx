@@ -35,17 +35,36 @@ const PlayerBar = ({
     if (!song || !audioRef.current) return;
 
     const audio = audioRef.current;
-    const streamUrl = songsAPI.getStreamUrl(song.id);
+    const streamUrl = songsAPI.getStreamUrl(song.audioPath);
+
+    // Validate URL construction
+    if (!streamUrl || !streamUrl.includes('/media/audio/')) {
+      console.warn('Invalid audio URL constructed:', streamUrl);
+      setIsLoading(false);
+      return;
+    }
 
     setIsLoading(true);
+    setCurrentTime(0);
+    setDuration(0);
+    
+    // 1. Set source URL
     audio.src = streamUrl;
     
-    // Auto-play when song changes
-    audio.play().catch(() => {
-      setIsPlaying(false);
-    });
+    // 2. Explicitly load audio metadata
+    audio.load();
     
-    setIsPlaying(true);
+    // 3. Auto-play only after metadata can be loaded
+    // The play() promise will handle if metadata isn't ready yet
+    audio.play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch((error) => {
+        console.warn('Audio playback failed:', error);
+        setIsPlaying(false);
+        setIsLoading(false);
+      });
   }, [song]);
 
   // Handle audio events
@@ -55,10 +74,21 @@ const PlayerBar = ({
 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
-    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+      setIsLoading(false);
+    };
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handleCanPlay = () => setIsLoading(false);
     const handleEnded = () => onNext?.();
+    const handleError = () => {
+      console.error('Audio loading error:', audio.error?.message);
+      setIsLoading(false);
+      setIsPlaying(false);
+    };
+    const handleLoadStart = () => {
+      setIsLoading(true);
+    };
 
     audio.addEventListener('play', handlePlay);
     audio.addEventListener('pause', handlePause);
@@ -66,6 +96,8 @@ const PlayerBar = ({
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('canplay', handleCanPlay);
     audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('loadstart', handleLoadStart);
 
     return () => {
       audio.removeEventListener('play', handlePlay);
@@ -74,6 +106,8 @@ const PlayerBar = ({
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('canplay', handleCanPlay);
       audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('loadstart', handleLoadStart);
     };
   }, [onNext]);
 

@@ -1,6 +1,7 @@
 /**
  * Sidebar Navigation Component
- * Main navigation for app sections and user account
+ * Main navigation for app sections with role-based menu items
+ * Apple Music-inspired design
  */
 
 import { useAuth } from '@/auth/AuthContext';
@@ -13,6 +14,7 @@ interface SidebarSection {
   label: string;
   path: string;
   icon: string;
+  adminOnly?: boolean;
 }
 
 const Sidebar = () => {
@@ -25,6 +27,11 @@ const Sidebar = () => {
     { id: 'browse', label: 'Browse', path: '/browse', icon: '◉' },
     { id: 'playlists', label: 'My Playlists', path: '/playlists', icon: '𝄞' },
     { id: 'library', label: 'Library', path: '/library', icon: '⚁' },
+    // Admin-only sections
+    ...(user?.role === 'ADMIN' ? [
+      { id: 'upload', label: 'Add Song', path: '/admin/upload', icon: '⬆', adminOnly: true },
+      { id: 'manage', label: 'Manage Songs', path: '/admin/manage', icon: '⚙', adminOnly: true },
+    ] : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -45,7 +52,8 @@ const Sidebar = () => {
               <li key={section.id}>
                 <Link
                   to={section.path}
-                  className={`menu-link ${isActive(section.path) ? 'active' : ''}`}
+                  className={`menu-link ${isActive(section.path) ? 'active' : ''} ${section.adminOnly ? 'admin-only' : ''}`}
+                  title={section.label}
                 >
                   <span className="menu-icon">{section.icon}</span>
                   <span className="menu-label">{section.label}</span>
@@ -67,7 +75,9 @@ const Sidebar = () => {
           </div>
           <div>
             <p className="user-email">{user?.email}</p>
-            <p className="user-role">{user?.role === 'ADMIN' ? '👑 Admin' : '👤 User'}</p>
+            <p className="user-role">
+              {user?.role === 'ADMIN' ? '👑 Admin' : '👤 User'}
+            </p>
           </div>
         </div>
 
@@ -75,6 +85,7 @@ const Sidebar = () => {
           className="user-menu-button"
           onClick={() => setShowUserMenu(!showUserMenu)}
           title="User menu"
+          aria-label="User menu"
         >
           ⋮
         </button>

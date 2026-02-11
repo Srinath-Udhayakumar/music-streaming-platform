@@ -17,8 +17,8 @@ export const playlistsAPI = {
   create: async (name: string): Promise<Playlist> => {
     const response = await apiClient.post<Playlist>(
       endpoint,
-      {},
-      { params: { name } }
+      { name },
+      { headers: { 'Content-Type': 'application/json' } }
     );
     return response.data;
   },

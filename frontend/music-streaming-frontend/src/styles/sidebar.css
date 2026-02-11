@@ -4,8 +4,8 @@
  */
 
 .sidebar {
-  width: 260px;
-  background: #000;
+  width: 280px;
+  background: #000000;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 200;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
@@ -47,10 +47,7 @@
   font-size: 20px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FFFFFF;
   letter-spacing: -0.5px;
 }
 
@@ -114,8 +111,19 @@
   transform: translateY(-50%);
   width: 4px;
   height: 24px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #FA243C;
   border-radius: 0 2px 2px 0;
+}
+
+.menu-link.admin-only {
+  color: rgba(250, 36, 60, 0.7);
+  font-size: 14px;
+  padding-left: 40px;
+}
+
+.menu-link.admin-only:hover {
+  color: #FA243C;
+  background: rgba(250, 36, 60, 0.05);
 }
 
 .menu-icon {
@@ -152,7 +160,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #FA243C;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,7 +223,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   min-width: 140px;
-  z-index: 101;
+  z-index: 300;
   animation: slideDown 0.2s ease-out;
 }
 
@@ -235,7 +243,7 @@
   padding: 10px 16px;
   background: transparent;
   border: none;
-  color: #ff3b30;
+  color: #FF453A;
   text-align: left;
   font-size: 14px;
   cursor: pointer;
@@ -246,7 +254,7 @@
 }
 
 .logout-button:hover {
-  background: rgba(255, 59, 48, 0.1);
+  background: rgba(255, 69, 58, 0.1);
 }
 
 /* Responsive */

@@ -4,7 +4,7 @@
  */
 
 import { API_CONFIG } from '@/config';
-import type { AuthResponse, LoginRequest, User } from '@/types/api';
+import type { AuthResponse, LoginRequest, SignupRequest, User } from '@/types/api';
 import { parseJwt } from '@/utils/jwt';
 import { apiClient, clearAuthToken, setAuthToken } from './client';
 
@@ -19,6 +19,35 @@ export const authAPI = {
     try {
       const response = await apiClient.post<AuthResponse>(
         `${endpoint}/login`,
+        request
+      );
+      
+      const { token } = response.data;
+      
+      // Store token
+      setAuthToken(token);
+      
+      // Parse user info from JWT
+      const user = parseJwt(token);
+      
+      return { token, user };
+    } catch (error) {
+      clearAuthToken();
+      throw error;
+    }
+  },
+
+  /**
+   * Logout user by clearing stored token
+   */
+  /**
+   * Register new user with email and password
+   * Returns JWT token upon successful registration
+   */
+  register: async (request: SignupRequest): Promise<{ token: string; user: User }> => {
+    try {
+      const response = await apiClient.post<AuthResponse>(
+        `${endpoint}/register`,
         request
       );
       

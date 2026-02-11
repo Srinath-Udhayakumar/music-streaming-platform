@@ -8,7 +8,6 @@ import type { Song } from '@/types/api';
 import { apiClient } from './client';
 
 const endpoint = API_CONFIG.ENDPOINTS.SONGS;
-const streamEndpoint = API_CONFIG.ENDPOINTS.STREAM;
 
 export const songsAPI = {
   /**
@@ -70,12 +69,35 @@ export const songsAPI = {
 
   /**
    * Get audio stream URL for a song
+   * Uses public /media/audio endpoint (no JWT required)
    * Supports HTTP Range requests for seeking
-   * @param songId - UUID of the song
-   * @returns URL for streaming audio
+   * @param audioPath - Audio file path from Song response (e.g., "storage/audio/UUID_filename.mp3" or "storage\audio\UUID_filename.mp3" on Windows)
+   * @returns URL for streaming audio with just the filename
    */
-  getStreamUrl: (songId: string): string => {
-    return `${API_CONFIG.BASE_URL}${streamEndpoint}/songs/${songId}`;
+  getStreamUrl: (audioPath: string | null | undefined): string => {
+    if (!audioPath) {
+      console.warn('getStreamUrl called with missing audioPath:', audioPath);
+      return '';
+    }
+
+    // Extract filename from audioPath
+    // Handles both forward slashes (Unix/returned) and backslashes (Windows paths)
+    // Examples:
+    // "storage/audio/UUID_Oru_Pere_Varalaaru.mp3" → "UUID_Oru_Pere_Varalaaru.mp3"
+    // "storage\audio\UUID_Oru_Pere_Varalaaru.mp3" → "UUID_Oru_Pere_Varalaaru.mp3"
+    // "UUID_Oru_Pere_Varalaaru.mp3" → "UUID_Oru_Pere_Varalaaru.mp3"
+    
+    // Split by either / or \ and get the last part
+    const parts = audioPath.replace(/\\/g, '/').split('/');
+    const filename = parts[parts.length - 1]?.trim() || '';
+    
+    if (!filename) {
+      console.warn('Could not extract filename from audioPath:', audioPath);
+      return '';
+    }
+
+    const url = `${API_CONFIG.BASE_URL}/media/audio/${filename}`;
+    return url;
   },
 
   /**
@@ -97,5 +119,13 @@ export const songsAPI = {
    */
   getAudioUrl: (filename: string): string => {
     return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.MEDIA}/audio/${filename}`;
+  },
+
+  /**
+   * Delete a song (admin only)
+   * @param songId - Song UUID
+   */
+  deleteSong: async (songId: string): Promise<void> => {
+    await apiClient.delete(`/api/admin/songs/${songId}`);
   },
 };
